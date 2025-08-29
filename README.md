@@ -13,18 +13,20 @@ Current Status
 1. File Browser on left side
 2. Line counter
 3. Zoom in/out using Ctrl + Scroll (only available inside the edit Widget)
+4. add tab features
 
 Currently on ...
 1. more magnificent UI and desigh concept
-2. add Tabs 
+2. Refactoring based on OOP - design pattern
 3. add LSP server for syntax highlight and caching
 4. Terminal feature
 
 --------------------------------------------------------------------------------------
 
 How to use : 
+(1) Linux / Mac OS
 1. mkdir build 
-2. cd dir
+2. cd build
 3. cmake ..
 4. make
-5. ~/.MyQtApp
+5. ~/.Papyrus
