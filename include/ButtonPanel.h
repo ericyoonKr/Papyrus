@@ -18,11 +18,10 @@ class ButtonPanel final : public QWidget {
 public:
 	explicit ButtonPanel(QWidget* parent = nullptr);
 
-	QPushButton* getLoadButton() const;
-	QPushButton* getSaveButton() const;
-	QPushButton* getSaveAsButton() const;
-
 public slots:
+	void onLoadButtonClicked();
+	void onSaveButtonClicked();
+	void onSaveAsButtonClicked();
 	void updateFilePathLabel(const QString& filePath);
 
 signals:

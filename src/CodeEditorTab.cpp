@@ -8,8 +8,10 @@ CodeEditorTab::CodeEditorTab(QWidget* parent) : QTabWidget(parent){
 
     setTabsClosable(true);
     setMovable(true);
-    connect(this, &QTabWidget::currentChanged, this, &CodeEditorTab::currentChanged);
-    connect(this, &QTabWidget::tabCloseRequested, this, &CodeEditorTab::onTabCloseRequested);
+    connect(this, &QTabWidget::currentChanged, 
+            this, &CodeEditorTab::currentChanged);
+    connect(this, &QTabWidget::tabCloseRequested, 
+            this, &CodeEditorTab::onTabCloseRequested);
 }
 
 // Model Point

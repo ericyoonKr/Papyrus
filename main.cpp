@@ -21,16 +21,24 @@ int main(int argc, char* argv[]){
 	QTNote window(codeEditorTab, &openFiles);
 
 	ButtonPanel *buttonPanel = window.getButtonPanel();
-																			// private, unaccessible
-	QObject::connect(buttonPanel, &ButtonPanel::loadTriggered, &window, &QTNote::doLoad);
-	QObject::connect(buttonPanel, &ButtonPanel::saveTriggered, &window, &QTNote::doSave);
-	QObject::connect(buttonPanel, &ButtonPanel::saveAsTriggered, &window, &QTNote::doSaveAs);
+																			
+	QObject::connect(buttonPanel, &ButtonPanel::loadTriggered, 
+					 &window, &QTNote::doLoad);
+	QObject::connect(buttonPanel, &ButtonPanel::saveTriggered, 
+		             &window, &QTNote::doSave);
+	QObject::connect(buttonPanel, &ButtonPanel::saveAsTriggered, 
+					 &window, &QTNote::doSaveAs);
 	
 	FileBrowser *fileBrowser = window.getFileBrowser();
-	QObject::connect(fileBrowser, &FileBrowser::fileSelected, &window, &QTNote::openFile);
-	QObject::connect(codeEditorTab, &CodeEditorTab::currentChanged, &window, &QTNote::onCurrentTabChanged);
-	QObject::connect(codeEditorTab, &CodeEditorTab::tabModificationChanged, &window, &QTNote::onTabModificationChanged);
-    QObject::connect(codeEditorTab, &CodeEditorTab::closeTabAttempt, &window, &QTNote::onCloseTabAttempt);
+	
+	QObject::connect(fileBrowser, &FileBrowser::fileSelected, 
+			 	 	 &window, &QTNote::openFile);
+	QObject::connect(codeEditorTab, &CodeEditorTab::currentChanged, 
+					 &window, &QTNote::onCurrentTabChanged);
+	QObject::connect(codeEditorTab, &CodeEditorTab::tabModificationChanged, 
+					 &window, &QTNote::onTabModificationChanged);
+    QObject::connect(codeEditorTab, &CodeEditorTab::closeTabAttempt, 
+					 &window, &QTNote::onCloseTabAttempt);
 	
 	app.setWindowIcon(QIcon(":/papyrus_logo_1024x1024.png"));
 

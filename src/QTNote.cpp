@@ -4,6 +4,8 @@
 #include "QTNote.h"
 #include "CodeEditor.h" 
 #include "TabManagerInterface.h"
+#include <QGuiApplication>
+#include <QScreen>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -35,7 +37,26 @@ QTNote::QTNote(TabManagerInterface* m_tabManager, QMap<QString, CodeEditor*> *op
 	//qobject_cast<QWidget*>(m_tabManagerInterface)->setParent(this);
 	m_tabManagerInterface->asWidget()->setParent(this);
 	
-	resize(1920, 1200);
+	
+	QScreen *screen = QGuiApplication::primaryScreen();
+	if (screen) {
+		QRect available = screen->availableGeometry();
+		const double aspect = 16.0 / 10.0;
+
+		int w = int(available.width() * 0.75);
+		int h = int(w / aspect);
+
+		if( h > int(available.height() * 0.75)) {
+			h = int(available.height() * 0.75);
+            w = int(h * aspect);
+		}
+		resize(w, h);
+		move(
+			 available.x() + (available.width() - w) / 2,
+			 available.y() + (available.height() - h) / 2
+		);
+	}
+
 	setWindowTitle("Main Window: QTNote");
 	QWidget* centralWidget = new QWidget(this);
 	centralWidget->setStyleSheet("background-color: white");
@@ -66,7 +87,8 @@ QTNote::QTNote(TabManagerInterface* m_tabManager, QMap<QString, CodeEditor*> *op
 	 */
 	m_tabManagerInterface->addNewTab("", "");
 
-	connect(m_fileBrowser, &FileBrowser::fileSelected, this, &QTNote::openFile);
+	connect(m_fileBrowser, &FileBrowser::fileSelected, 
+			this, &QTNote::openFile);
 
 }
 

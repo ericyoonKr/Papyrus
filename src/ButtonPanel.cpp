@@ -29,6 +29,12 @@ ButtonPanel::ButtonPanel(QWidget* parent){
 
 	layout->setColumnStretch(1,1);
 
+	connect(m_buttonLoad, &QPushButton::clicked, 
+			this, &ButtonPanel::onLoadButtonClicked);
+	connect(m_buttonSave, &QPushButton::clicked, 
+			this, &ButtonPanel::onSaveButtonClicked);
+	connect(m_buttonSaveAs, &QPushButton::clicked, 
+			this, &ButtonPanel::onSaveAsButtonClicked);
 }
 
 void ButtonPanel::updateFilePathLabel(const QString& filePath){
@@ -40,6 +46,7 @@ void ButtonPanel::updateFilePathLabel(const QString& filePath){
 	}
 }
 
-QPushButton* ButtonPanel::getLoadButton() const {return m_buttonLoad;}
-QPushButton* ButtonPanel::getSaveButton() const {return m_buttonSave;}
-QPushButton* ButtonPanel::getSaveAsButton() const {return m_buttonSaveAs;}
+
+void ButtonPanel::onLoadButtonClicked(){emit loadTriggered();}
+void ButtonPanel::onSaveButtonClicked(){emit saveTriggered();}
+void ButtonPanel::onSaveAsButtonClicked(){emit saveAsTriggered();}
