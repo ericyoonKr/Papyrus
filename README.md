@@ -16,11 +16,11 @@ Super light weight Cross-Platform Code Editor written in C++ / Qt Framework
 
 [Currently on]
 
-  <Fixing>
+  [Fixing]
     1. Save , Save As, Load Button not working 
     2. add [Add] button to create new vacant text tab
 
-  <Feature>
+  [Feature]
     1. more magnificent UI and desigh concept
     2. Refactoring based on OOP - design pattern
     3. add LSP server for syntax highlight and caching
