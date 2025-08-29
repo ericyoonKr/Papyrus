@@ -6,8 +6,7 @@ Super light weight Cross-Platform Code Editor written in C++ / Qt Framework
 
 
 
-<img width="1980" height="1200" alt="스크린샷 2025-08-22 10-56-03" src="https://github.com/user-attachments/assets/0ff02b58-2506-4243-99e3-4c577ece245f" />
-
+<img width="1440" height="900" alt="스크린샷 2025-08-29 112501" src="https://github.com/user-attachments/assets/fcce8dbf-d5e3-45ba-8c65-b50ccfab16ef" />
 
 [Current Status] 
 1. File Browser on left side
