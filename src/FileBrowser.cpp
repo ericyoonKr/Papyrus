@@ -2,7 +2,7 @@
 
 #include "FileBrowser.h"
 #include <QVBoxLayout>
-#include <QDir>
+#include <QStandardPaths>
 #include <QObject>
 
 // constructor 
@@ -11,13 +11,15 @@ FileBrowser::FileBrowser(QWidget *parent){
 
 	QVBoxLayout *layout = new QVBoxLayout(); 
 
+	const QString rootPath = QDir::rootPath();
+
 	m_fileSystemModel = new QFileSystemModel(this);
-	m_fileSystemModel->setRootPath(QDir::homePath());
+	m_fileSystemModel->setRootPath(rootPath);
 
 	m_treeView = new QTreeView(this);
 	m_treeView->setModel(m_fileSystemModel);
 	
-	m_treeView->setRootIndex(m_fileSystemModel->index(QDir::homePath()));
+	m_treeView->setRootIndex(m_fileSystemModel->index(rootPath));
 
 	m_fileBrowserLabel = new QLabel("FileBrowser",this);
 

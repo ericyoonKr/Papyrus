@@ -5,6 +5,7 @@
 #include "CodeEditor.h" 
 #include "TabManagerInterface.h"
 #include <QGuiApplication>
+#include <QDir>
 #include <QScreen>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -22,8 +23,8 @@
 #include <qnamespace.h>
 
 // need to be addressed
-QTNote::QTNote(TabManagerInterface* m_tabManager, QMap<QString, CodeEditor*> *openFilesModel, QWidget *parent)
-			   : QMainWindow(parent), m_openFiles_ptr(openFilesModel), m_tabManagerInterface(m_tabManager) {
+QTNote::QTNote(TabManagerInterface* tabManager, QMap<QString, CodeEditor*> *openFilesModel, QWidget *parent)
+			   : QMainWindow(parent), m_openFiles_ptr(openFilesModel), m_tabManagerInterface(tabManager) {
 
 	// template used
 	// dynamic casting
@@ -117,7 +118,8 @@ void QTNote::openFile(const QString& filePath){
 
 void QTNote::doLoad(){
 
-	const QString filePath = QFileDialog::getOpenFileName(this, "Open File", "~/", "Files(*.*)");
+	const QString rootPath = QDir::rootPath();
+	const QString filePath = QFileDialog::getOpenFileName(this, "Open File", "rootPath", "Files(*.*)");
 	openFile(filePath);
 }
 
