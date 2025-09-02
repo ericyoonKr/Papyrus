@@ -13,8 +13,8 @@
 #include <QPushButton>
 
 int main(int argc, char* argv[]){
-	QApplication app(argc, argv);
 
+	QApplication app(argc, argv);
 	QMap<QString, CodeEditor*> openFiles;
 	auto* codeEditorTab = new CodeEditorTab();
 	codeEditorTab->setModel(&openFiles);

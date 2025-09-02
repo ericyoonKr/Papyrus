@@ -7,7 +7,7 @@ if(WIN32)
 else()
     set(CMAKE_CXX_COMPILER "clang++")
     set(CMAKE_C_COMPILER "clang")
-    message(STATUS "Non-Windows detected, using Clang compiler.")
+	message(STATUS "Non-Windows detected, using CLANG compiler.")
 endif()
 
 set(CMAKE_CXX_STANDARD 17)

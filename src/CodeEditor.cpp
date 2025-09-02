@@ -13,6 +13,7 @@ LineNumberArea::LineNumberArea(CodeEditor *editor)
 	: QWidget(editor), m_codeEditor(editor){}
 
 QSize LineNumberArea::sizeHint()const{
+
 	return QSize(m_codeEditor->lineNumberAreaWidth(), 0);
 }
 
@@ -23,10 +24,7 @@ void LineNumberArea::paintEvent(QPaintEvent* event){
 CodeEditor::CodeEditor(QWidget* parent): QPlainTextEdit(parent){
 
 	QFont font;
-
 	font.setPointSize(14);
-
-
 
 	// CodeEditor Widget gets stylesheet's background and border attributes
 	setAttribute(Qt::WA_StyledBackground, true);
@@ -41,6 +39,7 @@ CodeEditor::CodeEditor(QWidget* parent): QPlainTextEdit(parent){
 }
 
 void CodeEditor::setFont(const QFont& font){
+
 	QPlainTextEdit::setFont(font);
 	if(m_lineNumberArea) {
 		m_lineNumberArea->updateFont(this->font());
@@ -59,6 +58,7 @@ void CodeEditor::resizeEvent(QResizeEvent* event){
 
 
 void CodeEditor::wheelEvent(QWheelEvent* e){
+
 	if (e->modifiers() == Qt::ControlModifier){
 		if(e->angleDelta().y() > 0 ) {
 			zoomIn();
@@ -74,10 +74,12 @@ void CodeEditor::wheelEvent(QWheelEvent* e){
 }
 
 void CodeEditor::updateLineNumberAreaWidth(){
+
 	setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
 
 void CodeEditor::updateLineNumberArea(const QRect& rect, int dy){
+
 	if(dy!=0){
 		m_lineNumberArea->scroll(0, dy);
 	} else {
@@ -121,5 +123,6 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent* event)
 }
 
 void LineNumberArea::updateFont(const QFont& font){
+
 	setFont(font);
 }

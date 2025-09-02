@@ -38,7 +38,6 @@ QTNote::QTNote(TabManagerInterface* tabManager, QMap<QString, CodeEditor*> *open
 	//qobject_cast<QWidget*>(m_tabManagerInterface)->setParent(this);
 	m_tabManagerInterface->asWidget()->setParent(this);
 	
-	
 	QScreen *screen = QGuiApplication::primaryScreen();
 	if (screen) {
 		QRect available = screen->availableGeometry();
@@ -63,7 +62,6 @@ QTNote::QTNote(TabManagerInterface* tabManager, QMap<QString, CodeEditor*> *open
 	centralWidget->setStyleSheet("background-color: white");
 	setCentralWidget(centralWidget);
 
-	
 	m_fileBrowser = new FileBrowser(this);
 	m_buttonPanel = new ButtonPanel(this);	
 
@@ -72,12 +70,9 @@ QTNote::QTNote(TabManagerInterface* tabManager, QMap<QString, CodeEditor*> *open
 
 	mainLayout->addWidget(m_buttonPanel, 0);
 
-
 	middleSplitter->addWidget(m_fileBrowser);
 	middleSplitter->addWidget(m_tabManagerInterface->asWidget());
 
-
-	
 	middleSplitter->setStretchFactor(0,1);
 	middleSplitter->setStretchFactor(1,5);
 
@@ -90,7 +85,6 @@ QTNote::QTNote(TabManagerInterface* tabManager, QMap<QString, CodeEditor*> *open
 
 	connect(m_fileBrowser, &FileBrowser::fileSelected, 
 			this, &QTNote::openFile);
-
 }
 
 QTNote::~QTNote(){}
