@@ -8,3 +8,4 @@ build/
 *.ilk
 
 .vscode/
+.cache/
