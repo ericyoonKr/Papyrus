@@ -14,8 +14,8 @@
 #include <qinputdialog.h>
 #include <qpoint.h>
 
-FileBrowser::FileBrowser(QWidget *parent) : QWidget(parent){
-
+FileBrowser::FileBrowser(QWidget *parent) : QWidget(parent)
+{
 	QVBoxLayout *layout = new QVBoxLayout(this);
 
 	QString rootPath;
@@ -43,10 +43,12 @@ FileBrowser::FileBrowser(QWidget *parent) : QWidget(parent){
 	m_treeView->header()->setSectionResizeMode(1, QHeaderView::Interactive);
     m_treeView->header()->setSectionResizeMode(2, QHeaderView::Interactive);
     m_treeView->header()->setSectionResizeMode(3, QHeaderView::Interactive);
+
 	for (int i = 1; i < m_fileSystemModel->columnCount(); ++i) 
 	{
         m_treeView->resizeColumnToContents(i);
     }
+
 	// enable treeView right click 
 	m_treeView->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -69,9 +71,11 @@ FileBrowser::FileBrowser(QWidget *parent) : QWidget(parent){
 
 QTreeView *FileBrowser::getTreeView() const {return m_treeView; }
 
-void FileBrowser::onTreeViewClicked(const QModelIndex& index){
+void FileBrowser::onTreeViewClicked(const QModelIndex& index)
+{
 
-	if(m_fileSystemModel->fileInfo(index).isFile()){
+	if(m_fileSystemModel->fileInfo(index).isFile())
+	{
 		emit fileSelected(m_fileSystemModel->filePath(index));
 	}
 }
@@ -80,5 +84,3 @@ void FileBrowser::showContextMenu(const QPoint &pos)
 {
 	m_actionHandler->setupContextMenu(pos);
 }
-
-

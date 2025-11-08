@@ -21,8 +21,8 @@
 FileActionHandler::FileActionHandler(QTreeView *treeView, QFileSystemModel *model) 
 									: m_treeView(treeView), m_model(model){}
 
-void FileActionHandler::setupContextMenu(const QPoint &pos){
-
+void FileActionHandler::setupContextMenu(const QPoint &pos)
+{
 	QModelIndex index = m_treeView->indexAt(pos);  
 	QMenu menu(m_treeView);
 
@@ -76,9 +76,7 @@ void FileActionHandler::setupContextMenu(const QPoint &pos){
 		   			{createNewFolder(index);});
 			QObject::connect(newFileAction, &QAction::triggered, [this, index]() 
 		   			{createNewFile(index);});
-
 		}
-
 		menu.exec(m_treeView->viewport()->mapToGlobal(pos));
 	}
 }
@@ -86,26 +84,31 @@ void FileActionHandler::setupContextMenu(const QPoint &pos){
 void FileActionHandler::createNewFolder(const QModelIndex &parentIndex)
 {
 	QString parentPath = m_model->filePath(parentIndex);
-    if (!QFileInfo(parentPath).isDir()) {
+    if (!QFileInfo(parentPath).isDir()) 
+	{
         parentPath = m_model->filePath(parentIndex.parent());
     }
     bool ok;
     QString folderName = QInputDialog::getText(m_treeView, "New Folder",
                                                "Folder Name : ", QLineEdit::Normal,
                                                "New Folder", &ok);
-    if (ok && !folderName.isEmpty()) {
+    if (ok && !folderName.isEmpty()) 
+	{
         QDir dir(parentPath);
-        if (!dir.mkdir(folderName)) {
+        if (!dir.mkdir(folderName)) 
+		{
             QMessageBox::warning(m_treeView, "Error", "Cannot make new folder");
         }
     }
 
 }
 
-void FileActionHandler::createNewFile(const QModelIndex &parentIndex){
+void FileActionHandler::createNewFile(const QModelIndex &parentIndex)
+{
 
 	QString parentPath = m_model->filePath(parentIndex);
-    if (!QFileInfo(parentPath).isDir()) {
+    if (!QFileInfo(parentPath).isDir()) 
+	{
         parentPath = m_model->filePath(parentIndex.parent());
     }
     bool ok;
@@ -113,17 +116,22 @@ void FileActionHandler::createNewFile(const QModelIndex &parentIndex){
     QString fileName = QInputDialog::getText(m_treeView, "New File",
                                              "File Name", QLineEdit::Normal,
                                              "Untitled.txt", &ok);
-	if (ok && !fileName.isEmpty()) {
+	if (ok && !fileName.isEmpty()) 
+	{
         QFile file(parentPath + "/" + fileName);
-        if (!file.open(QIODevice::WriteOnly)) {
+        if (!file.open(QIODevice::WriteOnly)) 
+		{
             QMessageBox::warning(m_treeView, "Error", "Cannot make new file");
-        } else {
+        } 
+		else 
+		{
             file.close();
         }
     }
 } 
 
-void FileActionHandler::renameItem(const QModelIndex &index){
+void FileActionHandler::renameItem(const QModelIndex &index)
+{
 	QString oldPath = m_model->filePath(index);
     QFileInfo fileInfo(oldPath);
 
@@ -132,15 +140,19 @@ void FileActionHandler::renameItem(const QModelIndex &index){
                                             "New Name", QLineEdit::Normal,
                                             fileInfo.fileName(), &ok);
 
-    if (ok && !newName.isEmpty() && newName != fileInfo.fileName()) {
+    if (ok && !newName.isEmpty() && newName != fileInfo.fileName()) 
+	{
         QString newPath = fileInfo.absolutePath() + "/" + newName;
-        if (!QFile::rename(oldPath, newPath)) {
+
+        if (!QFile::rename(oldPath, newPath)) 
+		{
             QMessageBox::warning(m_treeView, "Error", "Cannot change name.");
         }
     }
 }
 
-void FileActionHandler::deleteItem(const QModelIndex &index){
+void FileActionHandler::deleteItem(const QModelIndex &index)
+{
  QString path = m_model->filePath(index);
     QFileInfo fileInfo(path);
     QString itemType = fileInfo.isDir() ? "Folder" : "File";
@@ -149,13 +161,12 @@ void FileActionHandler::deleteItem(const QModelIndex &index){
                                        QString("Are you sure you want to permanently delete '%1'?").arg(fileInfo.fileName()),
                                        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
-    if (reply == QMessageBox::No) {
-        return;
-    }
+    if (reply == QMessageBox::No) {return;}
 
     bool success = fileInfo.isDir() ? QDir(path).removeRecursively() : QFile::remove(path);
 
-    if (!success) {
+    if (!success) 
+	{
         QMessageBox::warning(m_treeView, "Error", QString("Cannot delete %1.").arg(itemType));
     }
 }

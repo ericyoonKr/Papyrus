@@ -14,7 +14,8 @@ class QFileSystemModel;
 class QModelIndex;
 class FileActionHandler;
 
-class FileBrowser final : public QWidget {
+class FileBrowser final : public QWidget 
+{
 
 	Q_OBJECT
 

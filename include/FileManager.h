@@ -3,7 +3,8 @@
 #include <QString>
 #include <QObject>
 
-class FileManager : public QObject {
+class FileManager : public QObject 
+{
 
 	Q_OBJECT
 

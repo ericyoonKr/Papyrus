@@ -6,10 +6,11 @@
 #include <qfloat16.h>
 #include <qimage.h>
 
-bool FileManager::saveTextToFile(const QString& filePath, const QString& content) {
-
+bool FileManager::saveTextToFile(const QString& filePath, const QString& content) 
+{
 	QFile file(filePath);
-	if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
+	if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
 		qWarning() << "Could not open file for writing: " << file.errorString();
 		return false;
 	}
@@ -19,10 +20,11 @@ bool FileManager::saveTextToFile(const QString& filePath, const QString& content
 	return true;
 }
 
-QString FileManager::loadTextfromFile(const QString& filePath, bool& ok) {
-
+QString FileManager::loadTextfromFile(const QString& filePath, bool& ok) 
+{
 	QFile file(filePath);
-	if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+	if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) 
+	{
 
 		qWarning() << "Could not open file for reading." << file.errorString();
 		ok = false;

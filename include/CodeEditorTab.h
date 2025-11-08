@@ -7,10 +7,10 @@
 #include "CodeEditor.h"
 #include "TabManagerInterface.h"
 
-class CodeEditorTab final : public QTabWidget, public TabManagerInterface {
+class CodeEditorTab final : public QTabWidget, public TabManagerInterface 
+{
     Q_OBJECT
     Q_INTERFACES(TabManagerInterface) 
-
 
 public:
     explicit CodeEditorTab(QWidget* parent = nullptr);

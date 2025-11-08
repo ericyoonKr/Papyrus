@@ -1,11 +1,13 @@
 #pragma once
 
 #include <QString>
+#include <QObject>
 
 class QWidget;
 class CodeEditor;
 
-class TabManagerInterface {
+class TabManagerInterface 
+{
 
 public:
 
@@ -25,4 +27,4 @@ public:
 
 };
 
-Q_DECLARE_INTERFACE(TabManagerInterface, "papyrus.TabManagerInterface")
+Q_DECLARE_INTERFACE(TabManagerInterface, "papyrus.TabManagerInterface");

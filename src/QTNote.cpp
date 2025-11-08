@@ -3,6 +3,7 @@
 #include "QTNote.h"
 #include "CodeEditor.h" 
 #include "TabManagerInterface.h"
+#include "DocumentManager.h"
 #include <QGuiApplication>
 #include <QDir>
 #include <QScreen>
@@ -23,7 +24,8 @@
 
 // need to be addressed
 QTNote::QTNote(TabManagerInterface* tabManager, QMap<QString, CodeEditor*> *openFilesModel, QWidget *parent)
-			   : QMainWindow(parent), m_openFiles_ptr(openFilesModel), m_tabManagerInterface(tabManager) {
+			   : QMainWindow(parent), m_tabManagerInterface(tabManager) 
+{
 
 	// template used
 	// dynamic casting
@@ -35,17 +37,20 @@ QTNote::QTNote(TabManagerInterface* tabManager, QMap<QString, CodeEditor*> *open
 
 	// check CodeEditorTab.cpp for details
 	//qobject_cast<QWidget*>(m_tabManagerInterface)->setParent(this);
+	m_docManager = new DocumentManager(m_tabManagerInterface, openFilesModel, this);	
 	m_tabManagerInterface->asWidget()->setParent(this);
 	
 	QScreen *screen = QGuiApplication::primaryScreen();
-	if (screen) {
+	if (screen) 
+	{
 		QRect available = screen->availableGeometry();
 		const double aspect = 16.0 / 10.0;
 
 		int w = int(available.width() * 0.75);
 		int h = int(w / aspect);
 
-		if( h > int(available.height() * 0.75)) {
+		if( h > int(available.height() * 0.75)) 
+		{
 			h = int(available.height() * 0.75);
             w = int(h * aspect);
 		}
@@ -56,7 +61,7 @@ QTNote::QTNote(TabManagerInterface* tabManager, QMap<QString, CodeEditor*> *open
 		);
 	}
 
-	setWindowTitle("Main Window: QTNote");
+	setWindowTitle("Papyrus");
 	QWidget* centralWidget = new QWidget(this);
 	centralWidget->setStyleSheet("background-color: white");
 	setCentralWidget(centralWidget);
@@ -80,128 +85,50 @@ QTNote::QTNote(TabManagerInterface* tabManager, QMap<QString, CodeEditor*> *open
 	/*
 	 * main layout, second argument 0 menas minimun, 1 means rest && all
 	 */
-	m_tabManagerInterface->addNewTab("", "");
 
-	connect(m_fileBrowser, &FileBrowser::fileSelected, 
-			this, &QTNote::openFile);
+
+    connect(m_buttonPanel, &ButtonPanel::loadTriggered, m_docManager, &DocumentManager::onLoadFromFileDialogRequested);
+    connect(m_buttonPanel, &ButtonPanel::saveTriggered, m_docManager, &DocumentManager::onSaveCurrentFileRequested);
+    connect(m_buttonPanel, &ButtonPanel::saveAsTriggered, m_docManager, &DocumentManager::onSaveAsCurrentFileRequested);
+    connect(m_fileBrowser, &FileBrowser::fileSelected, m_docManager, &DocumentManager::onOpenFileRequested);
+
+        connect(m_docManager, &DocumentManager::updateUINeeded, this, &QTNote::updateUIForTab);
+    connect(m_docManager, &DocumentManager::criticalErrorOccurred, this, &QTNote::showCriticalError);
+
+      auto* tabWidgetObject = m_tabManagerInterface->asWidget();
+    connect(tabWidgetObject, SIGNAL(currentChanged(int)), this, SLOT(onCurrentTabChanged()));
+    connect(tabWidgetObject, SIGNAL(tabModificationChanged(int,bool)), this, SLOT(onTabModificationChanged(int,bool)));
+    connect(tabWidgetObject, SIGNAL(tabCloseRequested(int)), this, SLOT(onCloseTabAttempt(int)));
+
+	m_tabManagerInterface->addNewTab("", "");
+	updateUIForTab(-1);
 }
 
 QTNote::~QTNote(){}
 
-
-void QTNote::openFile(const QString& filePath){
-
-	if(filePath.isEmpty()) return;
-	if(m_openFiles_ptr->contains(filePath)){
-
-		m_tabManagerInterface->setCurrentWidget(m_openFiles_ptr->value(filePath));
-		return;
-	}
-
-	bool success = false;
-	QString content = m_fileManager.loadTextfromFile(filePath, success);
-	if(success){
-
-		m_tabManagerInterface->addNewTab(filePath, content);
-	} else {
-		QMessageBox::critical(this, "Error", "Cannot open file " + filePath);
-	}
-}
-
-
-void QTNote::doLoad(){
-
-	const QString rootPath = QDir::rootPath();
-	const QString filePath = QFileDialog::getOpenFileName(this, "Open File", "rootPath", "Files(*.*)");
-	openFile(filePath);
-}
-
-
-bool QTNote::doSave(){
-
-	return saveFileLogic(m_tabManagerInterface->currentIndex());
-}
-
-
-
-bool QTNote::doSaveAs(){
-
-	int currentIndex = m_tabManagerInterface->currentIndex();
-	if(currentIndex == -1) return false;
-
-	CodeEditor *editor = m_tabManagerInterface->editorFor(currentIndex);
-	if(!editor) return false;
-
-	const QString newFilePath = QFileDialog::getSaveFileName(this, "Save As", 
-															 "QDir::homePath()", "Files(*.*)" );
-
-	
-	if(newFilePath.isEmpty()) return false;
-	if(m_fileManager.saveTextToFile(newFilePath, editor->toPlainText())){
-		m_tabManagerInterface->updateTabInfo(currentIndex, newFilePath);
-		editor->document()->setModified(false);
-	}
-	QMessageBox::critical(this, "Error", "Failed to save file.");
-
-	return false;
-	// if is Empty, do nothing
-}
-
-bool QTNote::saveFileLogic(int index){
-
-	if(index == -1) return false;
-	QString filePath = m_tabManagerInterface->filePathFor(index);
-	CodeEditor *editor = m_tabManagerInterface->editorFor(index);
-	if(!editor) return false;
-
-	if(filePath.isEmpty()) {return doSaveAs();}
-	// Key-point of this logic
-	if (m_fileManager.saveTextToFile(filePath, editor->toPlainText())){
-		editor->document()->setModified(false);
-		return true;
-	}
-	QMessageBox::critical(this, "Error", "Cannot save file.");
-	return false;
-}
-
-
 // slot area
-
-void QTNote::onCloseTabAttempt(int index){
-
-	if(!m_tabManagerInterface->isTabModified(index)){
-		m_tabManagerInterface->closeTab(index);
-		return;
-	}
-
-	QString fileName = QFileInfo(m_tabManagerInterface->filePathFor(index)).fileName();
-	if(fileName.isEmpty()) fileName = "Untitled";
-	QMessageBox msgBox(this);
-	msgBox.setText(QString("%1 File was edited.").arg(fileName));
-	msgBox.setInformativeText("Save changes?");
-	msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-	msgBox.setDefaultButton(QMessageBox::Save);
-
-	int ret = msgBox.exec();
-	if(ret == QMessageBox::Save) {
-		if(saveFileLogic(index)) {m_tabManagerInterface->closeTab(index);}
-	} else if (ret == QMessageBox::Discard){
-		m_tabManagerInterface->closeTab(index);
-	}
+void QTNote::onCloseTabAttempt(int index) 
+{
+    m_docManager->onCloseTabAttemptRequested(index);
 }
 
-void QTNote::onCurrentTabChanged() {
-
+void QTNote::onCurrentTabChanged() 
+{
 	updateUIForTab(m_tabManagerInterface->currentIndex());
 }
 
-void QTNote::onTabModificationChanged(int index, bool isModified) {
-
+void QTNote::onTabModificationChanged(int index, bool isModified) 
+{
 	updateUIForTab(index);
 }
 
-void QTNote::updateUIForTab(int index) {
+void QTNote::showCriticalError(const QString& title, const QString& message) 
+{
+    QMessageBox::critical(this, title, message);
+}
 
+void QTNote::updateUIForTab(int index) 
+{
 	// if true, get file path
 	// if false, get an empty string
 	QString path = (index != -1) ? m_tabManagerInterface->filePathFor(index) : "";
@@ -211,7 +138,8 @@ void QTNote::updateUIForTab(int index) {
 
 	setWindowTitle(QString("Papyrus - %1 %2").arg(fileName, modifiedMarker));
 	m_buttonPanel->updateFilePathLabel(path);
-	if(index != -1) {
+	if(index != -1) 
+	{
 		m_tabManagerInterface->setTabText(index, fileName + modifiedMarker);
 	}
 }

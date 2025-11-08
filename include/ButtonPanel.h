@@ -11,7 +11,8 @@
 class QPushButton;
 class QLabel;
 
-class ButtonPanel final : public QWidget {
+class ButtonPanel final : public QWidget 
+{
 
 	Q_OBJECT
 

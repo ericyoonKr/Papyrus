@@ -11,7 +11,8 @@ class QPoint;
 class QModelIndex;
 
 
-class FileActionHandler final {
+class FileActionHandler final 
+{
 
 public:
 

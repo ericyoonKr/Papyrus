@@ -12,7 +12,8 @@
 
 class LineNumberArea;
 
-class CodeEditor : public QPlainTextEdit{
+class CodeEditor : public QPlainTextEdit
+{
 
 	Q_OBJECT
 
@@ -36,7 +37,8 @@ private:
 	LineNumberArea* m_lineNumberArea;
 };
 
-class LineNumberArea : public QWidget{
+class LineNumberArea : public QWidget
+{
 
 	Q_OBJECT
 

@@ -8,7 +8,8 @@
 #include <QFileInfo>
 #include <QObject>
 
-ButtonPanel::ButtonPanel(QWidget* parent){
+ButtonPanel::ButtonPanel(QWidget* parent)
+{
 
 	QGridLayout* layout = new QGridLayout(this);
 
@@ -37,11 +38,15 @@ ButtonPanel::ButtonPanel(QWidget* parent){
 			this, &ButtonPanel::onSaveAsButtonClicked);
 }
 
-void ButtonPanel::updateFilePathLabel(const QString& filePath){
+void ButtonPanel::updateFilePathLabel(const QString& filePath)
+{
 
-	if(filePath.isEmpty()){
+	if(filePath.isEmpty())
+	{
 		m_filePathLabel->setText("No File Loaded");
-	} else {
+	} 
+	else 
+	{
 		m_filePathLabel->setText(QFileInfo(filePath).fileName());
 	}
 }

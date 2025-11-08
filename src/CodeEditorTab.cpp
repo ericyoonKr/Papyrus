@@ -4,7 +4,8 @@
 #include <QFileInfo>
 #include <QDebug>
 
-CodeEditorTab::CodeEditorTab(QWidget* parent) : QTabWidget(parent){
+CodeEditorTab::CodeEditorTab(QWidget* parent) : QTabWidget(parent)
+{
 
     setTabsClosable(true);
     setMovable(true);
@@ -16,23 +17,29 @@ CodeEditorTab::CodeEditorTab(QWidget* parent) : QTabWidget(parent){
 
 // Model Point
 // Enable tabs to control CodeEditor
-void CodeEditorTab::setModel(QMap<QString, CodeEditor*>* openFilesModel){
+void CodeEditorTab::setModel(QMap<QString, CodeEditor*>* openFilesModel)
+{
 
     m_openFiles_ptr = openFilesModel; 
 }
 
-void CodeEditorTab::onTabCloseRequested(int index){
+void CodeEditorTab::onTabCloseRequested(int index)
+{
 
-    if(isTabModified(index)) {
+    if(isTabModified(index)) 
+	{
         emit closeTabAttempt(index);
-    } else {
+    } 
+	else 
+	{
         closeTab(index);
     }
 }
 
 
 
-void CodeEditorTab::addNewTab(const QString& filePath, const QString &content){
+void CodeEditorTab::addNewTab(const QString& filePath, const QString &content)
+{
 
     Q_ASSERT(m_openFiles_ptr != nullptr);
 
@@ -42,7 +49,8 @@ void CodeEditorTab::addNewTab(const QString& filePath, const QString &content){
     bool isUntitled = (currentIndex != -1) ? filePathFor(currentIndex).isEmpty() : false;
     bool isModified = (currentIndex != -1) ? isTabModified(currentIndex) : false;
 
-    if (currentEditor && isUntitled && !isModified) {
+    if (currentEditor && isUntitled && !isModified) 
+	{
         m_openFiles_ptr->remove("");
 
         currentEditor->setPlainText(content);
@@ -54,16 +62,20 @@ void CodeEditorTab::addNewTab(const QString& filePath, const QString &content){
         
         m_openFiles_ptr->insert(filePath, currentEditor);
 
-    } else {
+    } 
+	else 
+	{
         CodeEditor *newEditor = new CodeEditor(this);
 
         newEditor->setPlainText(content);
         newEditor->document()->setModified(false);
 
         connect(newEditor->document(), &QTextDocument::modificationChanged, 
-                this, [this, newEditor](bool modified) {
+                this, [this, newEditor](bool modified) 
+				{
                     int index = indexOf(newEditor);
-                    if(index != -1) {
+                    if(index != -1) 
+					{
                         emit tabModificationChanged(index, modified);
                     }
                 }
@@ -78,7 +90,8 @@ void CodeEditorTab::addNewTab(const QString& filePath, const QString &content){
     }
 }
 
-void CodeEditorTab::updateTabInfo(int index, const QString &newFilePath){
+void CodeEditorTab::updateTabInfo(int index, const QString &newFilePath)
+{
 
     Q_ASSERT(m_openFiles_ptr != nullptr);
 
@@ -87,7 +100,8 @@ void CodeEditorTab::updateTabInfo(int index, const QString &newFilePath){
     CodeEditor *editor = editorFor(index);
 
     // this part needs to be checked... inevitable?
-    if (m_openFiles_ptr -> contains(oldFilePath)){
+    if (m_openFiles_ptr -> contains(oldFilePath))
+	{
         m_openFiles_ptr -> insert(newFilePath, editor);
         setTabToolTip(index, newFilePath);
     }
@@ -108,33 +122,39 @@ void CodeEditorTab::closeTab(int index){
     }
 }
 
-void CodeEditorTab::setTabText(int index, const QString &text){
+void CodeEditorTab::setTabText(int index, const QString &text)
+{
     
-    if (index >= 0 && index < count()) {
+    if (index >= 0 && index < count()) 
+	{
 
         QTabWidget::setTabText(index, text);
     }
 }
 
-CodeEditor *CodeEditorTab::editorFor(int index) const {
+CodeEditor *CodeEditorTab::editorFor(int index) const 
+{
 
     return qobject_cast<CodeEditor*>(widget(index));
 }
 
-QString CodeEditorTab::filePathFor(int index) const {
+QString CodeEditorTab::filePathFor(int index) const 
+{
 
     if (index >= 0 || index >= count()) return tabToolTip(index);
 
     return QString();
 }
 
-bool CodeEditorTab::isTabModified(int index) const {
+bool CodeEditorTab::isTabModified(int index) const 
+{
 
     CodeEditor *editor = editorFor(index);
     return editor ? editor->document()->isModified() : false;
 }
 
-int CodeEditorTab::currentIndex() const {
+int CodeEditorTab::currentIndex() const 
+{
     
     return QTabWidget::currentIndex();
 }
