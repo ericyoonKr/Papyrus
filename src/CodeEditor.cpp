@@ -1,4 +1,5 @@
 // CodeEditor.cpp
+// Code editing page rendering engine 
 
 #include "CodeEditor.h"
 #include <QPainter>

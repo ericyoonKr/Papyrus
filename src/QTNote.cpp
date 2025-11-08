@@ -1,6 +1,5 @@
 //QTNote.cpp
 
-
 #include "QTNote.h"
 #include "CodeEditor.h" 
 #include "TabManagerInterface.h"
